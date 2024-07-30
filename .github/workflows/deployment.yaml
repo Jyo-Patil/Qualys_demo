@@ -93,4 +93,4 @@ jobs:
          IMAGE_TAG: "latest"
          TIMEOUT: 1
         run: |
-          ./validate_image.sh ${{secrets.QUALYS_API_SERVER}} ${{secrets.USERNAME}} ${{secrets.PASSWORD}} ${$ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG} ${{TIMEOUT}}    
+          ./validate_image.sh ${{secrets.QUALYS_API_SERVER}} ${{secrets.USERNAME}} ${{secrets.PASSWORD}} ${$ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG} ${env.TIMEOUT}    
