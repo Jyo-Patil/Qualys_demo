@@ -91,4 +91,5 @@ jobs:
          DOCKER_IMAGE: ${{ steps.build-image.outputs.image }}
          TIMEOUT: 1
         run: |
+          cd containerSecurity
           ./validate_image.sh ${{secrets.QUALYS_API_SERVER}} ${{secrets.USERNAME}} ${{secrets.PASSWORD}} $DOCKER_IMAGE $TIMEOUT   
