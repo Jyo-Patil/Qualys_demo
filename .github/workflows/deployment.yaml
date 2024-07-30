@@ -59,7 +59,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.REPO_NAME}}
           IMAGE_TAG: "latest"
-
         run: |
           pwd
           cd ~
@@ -71,3 +70,27 @@ jobs:
           echo "Pushing image to ECR..."
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      - name: checkout // add container security folder in your repo from this link https://github.com/Qualys/community/tree/master/containerSecurity
+        uses: actions/checkout@v4
+
+      - name: qualys image
+        run: |    
+          sudo docker run -d --restart on-failure -v /var/run/docker.sock:/var/run/docker.sock:ro -v /etc/qualys:/usr/local/qualys/qpa/data/conf/agent-data -v /usr/local/qualys/sensor/data:/usr/local/qualys/qpa/data -e ACTIVATIONID=94e0221e-dbb6-4f52-b0f6-37ae2b53453c -e CUSTOMERID=b8a01209-8271-f1e8-8387-f098a7f9d5e1 -e POD_URL=https://cmsqagpublic.qg1.apps.qualys.in/ContainerSensor --net=host --name qualys-container-sensor qualys/qcs-sensor:latest --cicd-deployed-sensor
+
+      - name: get docker image
+        env:
+         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+         ECR_REPOSITORY: ${{ secrets.REPO_NAME}}
+         IMAGE_TAG: "latest"
+        run: |
+          docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: checkout qualys repo
+        env:
+         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+         ECR_REPOSITORY: ${{ secrets.REPO_NAME}}
+         IMAGE_TAG: "latest"
+         TIMEOUT: 1
+        run: |
+          ./validate_image.sh ${{secrets.QUALYS_API_SERVER}} ${{secrets.USERNAME}} ${{secrets.PASSWORD}} ${{$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG}} ${{TIMEOUT}}    
