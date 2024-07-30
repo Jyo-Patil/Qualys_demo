@@ -92,4 +92,7 @@ jobs:
          TIMEOUT: 1
         run: |
           pwd
+          cd ..
+          cd ..
+          cd /home/runner/work/Qualys_demo/Qualys_demo/containerSecurity
           ./validate_image.sh ${{secrets.QUALYS_API_SERVER}} ${{secrets.USERNAME}} ${{secrets.PASSWORD}} $DOCKER_IMAGE $TIMEOUT   
