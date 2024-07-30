@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "foo" {
-  name                 = "Qualys-demo"
+  name                 = "qualysdemo"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
