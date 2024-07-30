@@ -98,4 +98,4 @@ jobs:
           cd ..
           cd /home/runner/work/Qualys_demo/Qualys_demo/containerSecurity
           chmod +x ./validate_image.sh
-          ./validate_image.sh https://gateway.qg1.apps.qualys.in/ $USERNAME $PASSWORD $DOCKER_IMAGE $TIMEOUT   
+          ./validate_image.sh https://gateway.qg1.apps.qualys.in/ nttda8yp JYOp59684# $DOCKER_IMAGE $TIMEOUT   
