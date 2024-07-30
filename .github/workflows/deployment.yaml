@@ -64,6 +64,8 @@ jobs:
           pwd
           cd ~
           pwd
+          cd ..
+          cd ..
           #cd /home/runner/work/eksdemoapp/eksdemoapp/
           # Build a docker container and push it to ECR 
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
