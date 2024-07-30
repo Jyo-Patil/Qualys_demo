@@ -90,10 +90,12 @@ jobs:
         env:
          DOCKER_IMAGE: ${{ steps.build-image.outputs.image }}
          TIMEOUT: 1
+         USERNAME: ${{secrets.USERNAME}}
+         PASSWORD: ${{secrets.PASSWORD}}
         run: |
           pwd
           cd ..
           cd ..
           cd /home/runner/work/Qualys_demo/Qualys_demo/containerSecurity
           chmod +x ./validate_image.sh
-          ./validate_image.sh https://gateway.qg1.apps.qualys.in/ ${{secrets.USERNAME}} ${{secrets.PASSWORD}} $DOCKER_IMAGE $TIMEOUT   
+          ./validate_image.sh https://gateway.qg1.apps.qualys.in/ $USERNAME $PASSWORD $DOCKER_IMAGE $TIMEOUT   
