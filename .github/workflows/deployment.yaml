@@ -88,9 +88,7 @@ jobs:
 
       - name: checkout qualys repo
         env:
-         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-         ECR_REPOSITORY: ${{ secrets.REPO_NAME}}
-         IMAGE_TAG: "latest"
+         DOCKER_IMAGE: ${{ steps.build-image.outputs.image }}
          TIMEOUT: 1
         run: |
-          ./validate_image.sh ${{secrets.QUALYS_API_SERVER}} ${{secrets.USERNAME}} ${{secrets.PASSWORD}} $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ${env.TIMEOUT}    
+          ./validate_image.sh ${{secrets.QUALYS_API_SERVER}} ${{secrets.USERNAME}} ${{secrets.PASSWORD}} $DOCKER_IMAGE $TIMEOUT   
