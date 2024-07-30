@@ -95,4 +95,5 @@ jobs:
           cd ..
           cd ..
           cd /home/runner/work/Qualys_demo/Qualys_demo/containerSecurity
+          chmod +x
           ./validate_image.sh ${{secrets.QUALYS_API_SERVER}} ${{secrets.USERNAME}} ${{secrets.PASSWORD}} $DOCKER_IMAGE $TIMEOUT   
