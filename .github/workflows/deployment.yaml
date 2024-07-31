@@ -89,7 +89,7 @@ jobs:
       - name: checkout qualys repo
         env:
          IMAGE: ${{ steps.build-image.outputs.image }}
-         TIMEOUT: 5
+         TIMEOUT: 600
          USERNAME: ${{secrets.USERNAME}}
          PASSWORD: ${{secrets.PASSWORD}}
          QUALYS_API_SERVER: ${{secrets.QUALYS_API_SERVER}}
