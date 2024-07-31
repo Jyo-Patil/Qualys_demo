@@ -89,7 +89,7 @@ jobs:
       - name: checkout qualys repo
         env:
          DOCKER_IMAGE: ${{ steps.build-image.outputs.image }}
-         TIMEOUT: 1
+         TIMEOUT: 5
          USERNAME: ${{secrets.USERNAME}}
          PASSWORD: ${{secrets.PASSWORD}}
         run: |
