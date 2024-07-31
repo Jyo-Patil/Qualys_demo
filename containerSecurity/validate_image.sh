@@ -53,7 +53,7 @@ get_token() {
 
 get_result () {
 	echo "Getting result for ${IMAGE_ID}"
-	CURL_COMMAND=$($CURL -k -s -X GET https://gateway.qg1.apps.qualys.in/csapi/v1.3/images/${SHA} -H 'accept: application/json' -H 'Authorization: Bearer '${TOKEN} -o ${IMAGE_ID}.json -w "%{http_code}")
+	CURL_COMMAND=$($CURL -k -s -X GET 'https://gateway.qg1.apps.qualys.in/csapi/v1.3/images/${SHA}' -H 'accept: application/json' -H 'Authorization: Bearer '${TOKEN} -o ${IMAGE_ID}.json -w "%{http_code}")
 	HTTP_CODE=$CURL_COMMAND
 	echo "HTTP Code: ${HTTP_CODE}"
 	if [ "$HTTP_CODE" == "200" ]; then
