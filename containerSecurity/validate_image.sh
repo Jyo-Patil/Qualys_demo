@@ -47,7 +47,7 @@ check_command_exists () {
 
 get_token() {
         echo "Generate Gateway Token for API Version:v1.3"  
-	TOKEN=$($CURL -X POST "https://gateway.qg1.apps.qualys.in/auth" -d "username=nttda8yp&password=JYOp59684#&token=true" -H "Content-Type: application/x-www-form-urlencoded")
+	TOKEN=$($CURL -k -X POST 'https://gateway.qg1.apps.qualys.in/auth' -d 'username='nttda8yp'&password='JYOp59684#'&token=true&permissions=true' -s)
 	echo $TOKEN
 }
 
