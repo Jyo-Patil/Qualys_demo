@@ -88,14 +88,15 @@ jobs:
 
       - name: checkout qualys repo
         env:
-         DOCKER_IMAGE: ${{ steps.build-image.outputs.image }}
+         IMAGE: ${{ steps.build-image.outputs.image }}
          TIMEOUT: 5
          USERNAME: ${{secrets.USERNAME}}
          PASSWORD: ${{secrets.PASSWORD}}
+         QUALYS_API_SERVER: ${{secrets.QUALYS_API_SERVER}}
         run: |
           pwd
           cd ..
           cd ..
           cd /home/runner/work/Qualys_demo/Qualys_demo/containerSecurity
           chmod +x ./validate_image.sh
-          ./validate_image.sh https://gateway.qg1.apps.qualys.in/ nttda8yp JYOp59684# $DOCKER_IMAGE $TIMEOUT   
+          ./validate_image.sh ${QUALYS_API_SERVER} ${USERNAME} ${PASSWORD} ${IMAGE} ${TIMEOUT}

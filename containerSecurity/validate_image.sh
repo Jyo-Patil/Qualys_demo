@@ -47,15 +47,13 @@ check_command_exists () {
 
 get_token() {
         echo "Generate Gateway Token for API Version:v1.3"  
-	TOKEN=$($CURL -k -X POST 'https://gateway.qg1.apps.qualys.in/auth' -d 'username='nttda8yp'&password='JYOp59684#'&token=true&permissions=true' -s)
+	TOKEN=$($CURL -k -X POST ''${QUALYS_API_SERVER}'/auth' -d 'username='${USERNAME}'&password='${PASSWORD}'&token=true&permissions=true' -s)
 	echo $TOKEN
 }
 
 get_result () {
-	echo $TOKEN
-	echo "getting result for ${TOKEN}"
 	echo "Getting result for ${IMAGE_ID}"
-	CURL_COMMAND=$($CURL -k -s -X GET "https://gateway.qg1.apps.qualys.in/csapi/v1.3/images/${SHA}" -H 'accept: application/json' -H 'Authorization: Bearer '${TOKEN} -o ${IMAGE_ID}.json -w "%{http_code}")
+	CURL_COMMAND=$($CURL -k -s -X GET ${QUALYS_API_SERVER}/csapi/v1.3/images/${SHA} -H 'accept: application/json' -H 'Authorization: Bearer '${TOKEN} -o ${IMAGE_ID}.json -w "%{http_code}")
 	HTTP_CODE=$CURL_COMMAND
 	echo "HTTP Code: ${HTTP_CODE}"
 	if [ "$HTTP_CODE" == "200" ]; then
