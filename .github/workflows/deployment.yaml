@@ -37,66 +37,66 @@ jobs:
           terraform plan
       - name: Terraform Apply
         run: |
-          terraform apply -auto-approve
+          terraform destroy -auto-approve
       - name: Get Outputs
         run: |
           terraform output -json > tf-all-output.json
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+      # - name: Checkout
+      #   uses: actions/checkout@v2
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-1
+      # - name: Login to Amazon ECR
+      #   id: login-ecr
+      #   uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push the image to Amazon ECR
-        id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.REPO_NAME}}
-          IMAGE_TAG: "latest"
-        run: |
-          pwd
-          cd ~
-          pwd
-          cd ..
-          cd ..
-          cd /home/runner/work/Qualys_demo/Qualys_demo/
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          echo "Pushing image to ECR..."
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+      # - name: Build, tag, and push the image to Amazon ECR
+      #   id: build-image
+      #   env:
+      #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      #     ECR_REPOSITORY: ${{ secrets.REPO_NAME}}
+      #     IMAGE_TAG: "latest"
+      #   run: |
+      #     pwd
+      #     cd ~
+      #     pwd
+      #     cd ..
+      #     cd ..
+      #     cd /home/runner/work/Qualys_demo/Qualys_demo/
+      #     docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+      #     echo "Pushing image to ECR..."
+      #     docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      #     echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-      - name: checkout // add container security folder in your repo from this link https://github.com/Qualys/community/tree/master/containerSecurity
-        uses: actions/checkout@v4
+      # - name: checkout // add container security folder in your repo from this link https://github.com/Qualys/community/tree/master/containerSecurity
+      #   uses: actions/checkout@v4
 
-      - name: qualys image
-        run: |    
-          sudo docker run -d --restart on-failure -v /var/run/docker.sock:/var/run/docker.sock:ro -v /etc/qualys:/usr/local/qualys/qpa/data/conf/agent-data -v /usr/local/qualys/sensor/data:/usr/local/qualys/qpa/data -e ACTIVATIONID=94e0221e-dbb6-4f52-b0f6-37ae2b53453c -e CUSTOMERID=b8a01209-8271-f1e8-8387-f098a7f9d5e1 -e POD_URL=https://cmsqagpublic.qg1.apps.qualys.in/ContainerSensor --net=host --name qualys-container-sensor qualys/qcs-sensor:latest --cicd-deployed-sensor
+      # - name: qualys image
+      #   run: |    
+      #     sudo docker run -d --restart on-failure -v /var/run/docker.sock:/var/run/docker.sock:ro -v /etc/qualys:/usr/local/qualys/qpa/data/conf/agent-data -v /usr/local/qualys/sensor/data:/usr/local/qualys/qpa/data -e ACTIVATIONID=94e0221e-dbb6-4f52-b0f6-37ae2b53453c -e CUSTOMERID=b8a01209-8271-f1e8-8387-f098a7f9d5e1 -e POD_URL=https://cmsqagpublic.qg1.apps.qualys.in/ContainerSensor --net=host --name qualys-container-sensor qualys/qcs-sensor:latest --cicd-deployed-sensor
 
-      - name: get docker image
-        env:
-         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-         ECR_REPOSITORY: ${{ secrets.REPO_NAME}}
-         IMAGE_TAG: "latest"
-        run: |
-          docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      # - name: get docker image
+      #   env:
+      #    ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      #    ECR_REPOSITORY: ${{ secrets.REPO_NAME}}
+      #    IMAGE_TAG: "latest"
+      #   run: |
+      #     docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      - name: checkout qualys repo
-        env:
-         IMAGE: ${{ steps.build-image.outputs.image }}
-         TIMEOUT: 600
-         USERNAME: ${{secrets.USERNAME}}
-         PASSWORD: ${{secrets.PASSWORD}}
-         QUALYS_API_SERVER: ${{secrets.QUALYS_API_SERVER}}
-        run: |
-          pwd
-          cd ..
-          cd ..
-          cd /home/runner/work/Qualys_demo/Qualys_demo/containerSecurity
-          chmod +x ./validate_image.sh
-          ./validate_image.sh ${QUALYS_API_SERVER} ${USERNAME} ${PASSWORD} ${IMAGE} ${TIMEOUT}
+      # - name: checkout qualys repo
+      #   env:
+      #    IMAGE: ${{ steps.build-image.outputs.image }}
+      #    TIMEOUT: 600
+      #    USERNAME: ${{secrets.USERNAME}}
+      #    PASSWORD: ${{secrets.PASSWORD}}
+      #    QUALYS_API_SERVER: ${{secrets.QUALYS_API_SERVER}}
+      #   run: |
+      #     pwd
+      #     cd ..
+      #     cd ..
+      #     cd /home/runner/work/Qualys_demo/Qualys_demo/containerSecurity
+      #     chmod +x ./validate_image.sh
+      #     ./validate_image.sh ${QUALYS_API_SERVER} ${USERNAME} ${PASSWORD} ${IMAGE} ${TIMEOUT}
